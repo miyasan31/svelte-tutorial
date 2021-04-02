@@ -2,6 +2,8 @@
 	export let value = "";
 </script>
 
+<!-- ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー -->
+
 <div class="shadow flex">
 	<input
 		bind:value
