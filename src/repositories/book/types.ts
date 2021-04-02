@@ -3,16 +3,15 @@
 
 
 //  Google Books APIのレスポンス
- export interface Result {
-    items: BookItem[];
-    kind: string;
-    totalItems: number;
+ export interface ResultType {
+    items: BookItemType[]; // 本情報
+    kind: string; // カテゴリ
+    totalItems: number; // 検索ヒット数
   }
-  
 // 本の情報
-  export interface BookItem {
-    id: string;
-    volumeInfo: {
+  export interface BookItemType {
+    id: string; // id
+    volumeInfo: { // 本のいろんな情報（null有）
       title: string;
       authors?: string[];
       publishedDate?: string;
@@ -25,20 +24,21 @@
       pageCount: number;
       previewLink?: string;
     };
-    saleInfo?: {
+    saleInfo?: { // 値段？？？金額？？？
       listPrice: {
         amount: number;
       };
     };
   }
-  
-//  query parameters
-  export interface Params {
-    q: string;
-    startIndex?: number;
+//  APIリクエストのクエリー
+  export interface ParamsType { 
+    q: string; // クエリーパラメータ 検索する文字
+    startIndex?: number; //検索開始位置 index
   }
+
   
+// BookRepository.tsで BookRepositoryInterface　=> BookRepository① に実装
   export interface BookRepositoryInterface {
-    get(params: Params): Promise<Result>;
-    find(id: string): Promise<BookItem>;
+    get(params: ParamsType): Promise<ResultType>;
+    find(id: string): Promise<BookItemType>;
   }

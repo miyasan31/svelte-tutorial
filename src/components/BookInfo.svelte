@@ -1,22 +1,27 @@
 <script lang="ts">
-	import Row from "./Row.svelte";
-	import type { BookItem } from "../repositories/book";
-	export let book: BookItem;
+	import Row from "./Row.svelte"; // データテーブルのセルコンポーネント
+	import type { BookItemType } from "../repositories/book"; // 本情報の型定義
+	export let book: BookItemType; // bookの型定義bind
+	// 日本円に変換
 	const formatter = new Intl.NumberFormat("ja-JP", {
 		style: "currency",
 		currency: "JPY",
 	});
-	$: price = book.saleInfo?.listPrice?.amount
-		? formatter.format(book.saleInfo.listPrice.amount)
-		: "";
-
+	// イメージがあれば本のサムネイル表示、なければNoImage
 	$: src = book.volumeInfo.imageLinks
 		? book.volumeInfo.imageLinks.thumbnail
 		: "http://placehold.jp/eeeeee/cccccc/160x120.png?text=No%20Image";
+	// 値段があれば日本円にして表示、なければ空文字
+	$: price = book.saleInfo?.listPrice?.amount
+		? formatter.format(book.saleInfo.listPrice.amount)
+		: "";
 </script>
+
+<!-- ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー -->
 
 <div class="grid grid-cols-1 gap-2 md:grid-cols-3">
 	<div class="cente">
+		<!-- <img class="h-72 w-auto mx-auto" src={src} alt="thumnail" /> -->
 		<img class="h-72 w-auto mx-auto" {src} alt="thumnail" />
 	</div>
 	<div class="bg-white shadow overflow-hidden sm:rounded-lg col-span-2">
@@ -28,6 +33,7 @@
 		<div class="border-t border-gray-200">
 			<dl>
 				<Row dt="著者">
+					<!-- Rowコンポーネントの<slot/>に表示される -->
 					{book.volumeInfo.authors?.join(",")}
 				</Row>
 				<Row dt="概要">
@@ -46,6 +52,7 @@
 					{book.volumeInfo.publisher}
 				</Row>
 				<Row dt="プレビュー">
+					<!-- プレビューリンクが有れば表示 -->
 					{#if book.volumeInfo.previewLink}
 						<a href={book.volumeInfo.previewLink} class="text-blue-400">
 							{book.volumeInfo.previewLink}
